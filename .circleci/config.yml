@@ -85,7 +85,7 @@ jobs:
       - run: *jfrog-login
       - run:
           name: Run Maven install
-          command: mvn -DskipWildfly -DskipDelombok -B -q clean install -s .circleci/settings.xml
+          command: mvn -DskipWildfly -DskipDelombok -B clean install -s .circleci/settings.xml
       - save_cache:
           paths:
             - ~/.m2
