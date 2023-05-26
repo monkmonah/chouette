@@ -25,6 +25,7 @@ aliases:
       IMAGE="ozaitsev/ch_test"
       echo "Image: ${IMAGE}"
       docker build -t $IMAGE .
+      docker inspect $IMAGE
       docker tag $IMAGE "${IMAGE}":"${VERSION}"
       docker login -u ozaitsev --password-stdin < ${DOCKER_PASSWORD}
       docker push "${IMAGE}":"${VERSION}"
@@ -101,23 +102,6 @@ jobs:
             - mobi.chouette.ws
             - chouette_iev
 
-  sonar:
-    docker:
-      - image: cimg/openjdk:17.0
-        auth:
-          username: $DOCKERHUB_LOGIN
-          password: $DOCKERHUB_PASSWORD
-    environment:
-      MAVEN_OPTS: -Xmx3G
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - dep-cache-{{ checksum "pom.xml" }}
-            # fallback to the most recent cache if there is no exact match for this pom.xml
-            - dep-cache-
-      - attach_workspace:
-          at: ~/project
 
   deploy-docker:
     <<: *google-sdk-container-config
