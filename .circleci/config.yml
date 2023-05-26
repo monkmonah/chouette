@@ -101,7 +101,9 @@ jobs:
             - mobi.chouette.service
             - mobi.chouette.ws
             - chouette_iev
-
+      - store_artifacts:
+          path: ~/project
+          destination: artifact-file
 
   deploy-docker:
     <<: *google-sdk-container-config
