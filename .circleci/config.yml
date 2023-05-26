@@ -133,6 +133,8 @@ workflows:
       - build:
           context: global
       - deploy-docker:
+          requires:
+            - build
           context: global
           filters:
             branches:
