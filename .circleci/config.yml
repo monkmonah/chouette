@@ -121,14 +121,8 @@ workflows:
     jobs:
       - build:
           context: global
-      - sonar:
-          context: global
-          requires:
-            - build
       - deploy-docker:
           context: global
-          requires:
-            - sonar
           filters:
             branches:
               only: rutebanken_develop
