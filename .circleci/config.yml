@@ -104,7 +104,7 @@ jobs:
           destination: wildfly
       - store_artifacts:
           path: ~/project/docker/files/wildfly/standalone.conf
-          destination: wildflyconf
+          destination: standalone.conf
 
   deploy-docker:
     <<: *google-sdk-container-config
