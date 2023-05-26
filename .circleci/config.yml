@@ -102,8 +102,17 @@ jobs:
             - mobi.chouette.ws
             - chouette_iev
       - store_artifacts:
-          path: ~/project
-          destination: artifact-file
+          path: ~/project/docker/files/wildfly/iev.properties
+          destination: iev.properties
+      - store_artifacts:
+          path: ~/project/chouette_iev/target/chouette.ear
+          destination: chouette.ear
+      - store_artifacts:
+          path: ~/project/target/docker/wildfly
+          destination: wildfly
+      - store_artifacts:
+          path: ~/project/docker/files/wildfly/standalone.conf
+          destination: wildflyconf
 
   deploy-docker:
     <<: *google-sdk-container-config
