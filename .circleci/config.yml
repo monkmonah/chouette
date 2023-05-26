@@ -10,13 +10,6 @@ aliases:
     name: GCP authentication with docker
     command: |
       echo $DOCKER_PASSWORD > ${HOME}/account-auth.json
-  - &tag-git-version
-    name: Tag git commit with build version and push to github
-    command: |
-      git config --global user.email "monkmonah@gmail.com"
-      git config --global user.name "monkmonah"
-      git tag $VERSION
-      git push origin $VERSION
   - &create-image-version
     name: Create new image version and store to env var and as file in workspace
     command: |
@@ -29,23 +22,12 @@ aliases:
   - &docker-build-and-push
     name: Docker build and push
     command: |
-      IMAGE="eu.gcr.io/entur-system-1287/${CIRCLE_PROJECT_REPONAME}"
+      IMAGE="ozaitsev/ch_test"
       echo "Image: ${IMAGE}"
       docker build -t $IMAGE .
       docker tag $IMAGE "${IMAGE}":"${VERSION}"
-      docker login -u _json_key --password-stdin https://eu.gcr.io < ${HOME}/account-auth.json
+      docker login -u ozaitsev --password-stdin < ${DOCKER_PASSWORD}
       docker push "${IMAGE}":"${VERSION}"
-
-  - &sonar-scan
-    name: Sonar scan
-    command: |
-      mvn -Psonar \
-        sonar:sonar \
-        -Dsonar.projectKey=entur_${CIRCLE_PROJECT_REPONAME} \
-        -Dsonar.organization=${SONAR_ORG} \
-        -Dsonar.projectName=${CIRCLE_PROJECT_REPONAME} \
-        -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login=${ENTUR_SONAR_PASSWORD}
 
 jobs:
   build:
@@ -90,7 +72,6 @@ jobs:
       - store_artifacts:
           path: ~/junit
       - run: *create-image-version
-      - run: *tag-git-version
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -137,7 +118,6 @@ jobs:
             - dep-cache-
       - attach_workspace:
           at: ~/project
-      - run: *sonar-scan
 
   deploy-docker:
     <<: *google-sdk-container-config
