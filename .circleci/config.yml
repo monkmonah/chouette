@@ -76,7 +76,7 @@ jobs:
       # Cannot use go offline and -o because of snapshot dependencies.
       - run:
           name: Run Maven install
-          command: mvn -DskipWildfly -DskipDelombok -B clean install -s .circleci/settings.xml
+          command: mvn -DskipWildfly -DskipDelombok -B clean install
       - save_cache:
           paths:
             - ~/.m2
