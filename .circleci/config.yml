@@ -13,8 +13,8 @@ aliases:
   - &tag-git-version
     name: Tag git commit with build version and push to github
     command: |
-      git config --global user.email "circleci@entur.no"
-      git config --global user.name "circleci"
+      git config --global user.email "monkmonah@gmail.com"
+      git config --global user.name "monkmonah"
       git tag $VERSION
       git push origin $VERSION
   - &create-image-version
@@ -87,8 +87,6 @@ jobs:
             mkdir -p ~/junit/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
           when: always
-      - store_test_results:
-          path: ~/junit
       - store_artifacts:
           path: ~/junit
       - run: *create-image-version
