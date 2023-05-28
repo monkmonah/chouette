@@ -10,7 +10,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -19,7 +18,6 @@ import mobi.chouette.common.Constant;
 import mobi.chouette.common.Context;
 import mobi.chouette.common.chain.Command;
 import mobi.chouette.common.chain.CommandFactory;
-import mobi.chouette.common.metrics.CommandTimer;
 import mobi.chouette.common.monitor.JamonUtils;
 import mobi.chouette.exchange.CommandCancelledException;
 import mobi.chouette.exchange.DaoReader;
@@ -40,7 +38,6 @@ import mobi.chouette.model.util.NamingUtil;
 
 import com.jamonapi.Monitor;
 import com.jamonapi.MonitorFactory;
-import org.eclipse.microprofile.metrics.MetricRegistry;
 
 @Log4j
 @Stateless(name = ValidatorCommand.COMMAND)
@@ -49,9 +46,6 @@ public class ValidatorCommand implements Command, Constant {
 	public static final String COMMAND = "ValidatorCommand";
 
 	private static final String VALIDATION_ERROR_NO_DATA = "3-No-Data";
-
-	@Inject
-	protected MetricRegistry metricRegistry;
 
 	@EJB DaoReader reader;
 
@@ -103,8 +97,7 @@ public class ValidatorCommand implements Command, Constant {
 
 			ProcessingCommands commands = ProcessingCommandsFactory.create(ValidatorProcessingCommands.class.getName());
 
-			result = new CommandTimer(metricRegistry, "netex_validation", "NeTEx validation timer")
-					.timed( () -> process(context, commands, progression, false), parameters.getReferentialName().toUpperCase(Locale.ROOT));
+			result = process(context, commands, progression, false);
 
 
 		} catch (CommandCancelledException e) {
