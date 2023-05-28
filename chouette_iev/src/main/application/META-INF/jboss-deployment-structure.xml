@@ -5,4 +5,8 @@
             <subsystem name="logging" />
         </exclude-subsystems>
     </deployment>
+    <dependencies>
+        <module name="org.postgresql" />
+        <module name="org.hibernate" />
+    </dependencies>
 </jboss-deployment-structure>
